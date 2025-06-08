@@ -33,13 +33,12 @@ https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?steamid=7
 
 1. Add a **Browser Source** in OBS
 2. Use the URL with your profile ID or Steam ID
-3. Set Width: 570px, Height: 120px
+3. Set Width: 570px, Height: 90px
 4. Check "Refresh browser when scene becomes active"
 
 ### Finding Your IDs
 
--   **Profile ID**: Go to aoe2.net, search your profile, and copy the number from the URL
--   **Steam ID**: Use a Steam ID converter with your Steam profile URL
+-   **Profile ID**: Go to https://www.aoe2insights.com/, search your profile, and copy the number from the URL
 
 ## Deployment to GitHub Pages
 
@@ -56,12 +55,5 @@ https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?steamid=7
 For questions or suggestions:
 
 -   Create an issue on GitHub
--   Contact the original creator: Discord: Marty#1533
 
-```bash
-For any questions or suggests just write me!
-
-Discord: Marty#1533
-
-Gmail: lucasnicolasjappert@gmail.com
-```
+This was inspired from https://github.com/LucasJappert/ & https://github.com/transparencies/aoe2-rating-overlay
