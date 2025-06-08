@@ -2,8 +2,7 @@
 
 A real-time overlay for Age of Empires II: Definitive Edition showing player ratings, civilizations, match history, and game status. Perfect for streamers using OBS!
 
-[{91791F7C-8202-479C-9B1B-3F19FFE90BD6}](https://github.com/user-attachments/assets/e1e9bb26-c49e-46e1-bc8b-5e7b948c0380)
-)
+![{91791F7C-8202-479C-9B1B-3F19FFE90BD6}](https://github.com/user-attachments/assets/e1e9bb26-c49e-46e1-bc8b-5e7b948c0380)
 
 ## How to Use
 
