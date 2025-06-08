@@ -4,18 +4,21 @@ A real-time overlay for Age of Empires II: Definitive Edition showing player rat
 
 ![{91791F7C-8202-479C-9B1B-3F19FFE90BD6}](https://github.com/user-attachments/assets/e1e9bb26-c49e-46e1-bc8b-5e7b948c0380)
 
+## Quick Start
+
+**Ready to use overlay:** [https://franciscoescobar.github.io/aoe2-overlay/overlay-aoe.html?profileid=2223786](https://franciscoescobar.github.io/aoe2-overlay/overlay-aoe.html?profileid=2223786)
+
+Simply replace `2223786` with your own Profile ID in the URL above.
+
 ## How to Use
 
 ### Basic URL Structure
 
-You need either your Profile ID from aoe2.net or your Steam ID:
+You need your Profile ID from aoeinsights.com:
 
 ```bash
 # Using Profile ID
 https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?profileid=945834
-
-# Using Steam ID
-https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?steamid=76561199094237242
 ```
 
 ### Features
@@ -38,7 +41,7 @@ https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?steamid=7
 
 ### Finding Your IDs
 
--   **Profile ID**: Go to https://www.aoe2insights.com/, search your profile, and copy the number from the URL
+-   **Profile ID**: Go to https://www.aoeinsights.com/, search your profile, and copy the number from the URL
 
 ## Deployment to GitHub Pages
 

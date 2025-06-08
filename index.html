@@ -46,22 +46,18 @@
         <p>Real-time overlay for Age of Empires II: Definitive Edition</p>
         
         <h3>Usage Instructions:</h3>
-        <p>Replace <strong>YOUR-PROFILE-ID</strong> or <strong>YOUR-STEAM-ID</strong> in the URL below:</p>
+        <p>Replace <strong>YOUR-PROFILE-ID</strong> in the URL below:</p>
         
         <h4>Using Profile ID:</h4>
         <code id="profileUrl">overlay-aoe.html?profileid=YOUR-PROFILE-ID</code>
         
-        <h4>Using Steam ID:</h4>
-        <code id="steamUrl">overlay-aoe.html?steamid=YOUR-STEAM-ID</code>
+        <p><strong>For OBS:</strong> Use Browser Source with Width: 570px, Height: 90px</p>
         
-        <p><strong>For OBS:</strong> Use Browser Source with Width: 570px, Height: 120px</p>
-        
-        <a href="overlay-aoe.html?profileid=945834" class="overlay-link">View Demo</a>
+        <a href="overlay-aoe.html?profileid=2223786" class="overlay-link">View Demo</a>
         
         <p style="margin-top: 40px;">
             <small>
-                Find your Profile ID at <a href="https://aoe2.net" target="_blank" style="color: #405bfe;">aoe2.net</a><br>
-                Get your Steam ID from your Steam profile URL
+                Find your Profile ID at <a href="https://www.aoeinsights.com/" target="_blank" style="color: #405bfe;">aoeinsights.com</a>
             </small>
         </p>
     </div>
@@ -70,7 +66,6 @@
         // Update URLs with current domain
         const currentDomain = window.location.origin + window.location.pathname.replace('index.html', '');
         document.getElementById('profileUrl').textContent = currentDomain + 'overlay-aoe.html?profileid=YOUR-PROFILE-ID';
-        document.getElementById('steamUrl').textContent = currentDomain + 'overlay-aoe.html?steamid=YOUR-STEAM-ID';
     </script>
 </body>
 </html>
