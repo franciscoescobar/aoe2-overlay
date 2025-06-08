@@ -1,3 +1,6 @@
+# Disclaimer:
+Not all civs logos and unique units assets, newer ones still need to be added.
+
 # AoE2 DE Overlay - Live Match Tracker
 
 A real-time overlay for Age of Empires II: Definitive Edition showing player ratings, civilizations, match history, and game status. Perfect for streamers using OBS!
