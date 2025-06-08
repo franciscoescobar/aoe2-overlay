@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AoE2 DE Overlay - Original Style with Fixed API</title>
+    <style>
+        body {
+            background-color: rgba(0,0,0,1);
+            margin: 0;
+            padding: 0;
+            font-family: Lato, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+            color: #ddd;
+        }
+
+        .MainContent {
+            position: relative;
+            width: fit-content;
+            max-width: 570px;
+            height: 90px;
+            background-color: #444;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAYCAIAAAADE/iqAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS40E0BoxAAAAkJJREFUSEvNlulyozAQhP3TwQFxin3/J92vNcMhZGOym6qki3IhqTU9F5Jv8/wnf+au6/i9ghDCNE0+OMUwDH3fz9GHK57K97ZWLPFk+HZ5oYh+W8oQ5za0cSpM5ohRT5IfeDl48Fw+irhiW3KYFeTbdhzHg8UDLsoLwzA2TYPRrmvJ1eJELp9MoErmcRRgd7Ic5KYZYgAmNkPTGFfFShYMJg8v1nX9qKr07v6yTcFtMKZK/ng8tCdhHKeu7eCX8jDv9ztGFqac3jfBjeIxhbZmHR4uG5jEZ3OCIYnBJ4LwvOyYSm/Xkz8Ljl31Z00ejWdIgYnJ6qBaxFtVVQx8XTCLMmowVTgweTmGuANMaPQjzNAE8+MJUnYJjJrcYiy/nNUD98M8UHo10M8JUissNl+RUxrwgNqXOMoDeifvg5cgAUtp3uCXyq/4N/m1Md+AMl2WD98vTzOdy2/g40zy7s0J+FJ/Uv567SXPB+CjDZbzTAl5HSnnwFI6cN5eg2jyqPYprAM708YmZyLHSPIgffqFcwYi4UwEMP2CeQGWOKdhKno+AM7LnROLdTtl6wbV5G/kpCQ4qrCYFs2W7DxemLq96MFDt9oSFvAw1Sgutddsj0dMGYmd3BYK15R2oRCZbTbg98dH5cw8YibJBLVw6hS5q9i70rLWg6dEyDtdu/BLi0IUE5ozQ6tilzSIYtq91eOHmCOuaN7wpPNhr8vnQN5v+ncgDZ6eHK/kLxklQ1+Q761tM/xX9OQzfumvZoEflZ/nv1weAZl2wHrbAAAAAElFTkSuQmCC);
+            background-repeat: repeat;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 0 0 15px #000;
+            box-sizing: border-box;
+        }
+
+        .BordeAnimado {
+            width: 100%;
+            height: 90px;
+            border: 2px solid #555;
+            border-radius: 4px;
+        }
+
+        .SeparadorMedio {
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background-color: #fff;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .ContSwords {
+            position: absolute;
+            bottom: 0;
+            height: auto;
+            width: 130px;
+            background-color: #000;
+            border: 2px solid #fff;
+            z-index: 11;
+            height: fit-content;
+            padding: 1px 0;
+            border-radius: 10px 10px 0 0;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .ContSwords.Jugando {
+            animation: AnimacionDetallePartida 1s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes AnimacionDetallePartida {
+            0% { background-color: #323232; }
+            100% { background-color: #000; }
+        }
+
+        .SeccionI, .SeccionD {
+            width: 500px;
+            position: relative;
+            height: 100%;
+        }
+
+        .BarraColor1 {
+            width: 500px;
+            height: 8px;
+            background-color: red;
+            display: block;
+        }
+
+        .BarraColor2 {
+            width: 500px;
+            height: 8px;
+            background-color: #00f;
+            display: block;
+        }
+
+        .PanelJugador {
+            font-size: 24px;
+            display: block;
+            padding: 2px 0;
+            line-height: 48px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+
+        .DatosJugador {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .DatosJugador.Team1 {
+            padding-right: 55px;
+            justify-content: flex-start;
+        }
+
+        .DatosJugador.Team2 {
+            padding-left: 55px;
+            justify-content: flex-end;
+        }
+
+        .Seccion1v1 {
+            position: absolute;
+            width: 494px;
+            height: 100%;
+            top: 0;
+            z-index: 1;
+        }
+
+        .Seccion1v1.Team1 {
+            left: 0;
+        }
+
+        .Seccion1v1.Team2 {
+            right: 0;
+        }
+
+        .ImagenCiviJugador1v1 {
+            height: 120px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .ImagenCiviJugador1v1.Team1 {
+            left: 0;
+        }
+
+        .ImagenCiviJugador1v1.Team2 {
+            right: 0;
+            transform: scaleX(-1);
+        }
+
+        .SeccionDetalleJugador1v1 {
+            height: 100%;
+            position: relative;
+        }
+
+        .Info1v1 {
+            box-sizing: border-box;
+            padding: 0 4px;
+            line-height: 32px;
+        }
+
+        .Info1v1.t1 {
+            text-align: right;
+            padding-right: 24px;
+            padding-left: 65px;
+        }
+
+        .Info1v1.t2 {
+            text-align: left;
+            padding-left: 27px;
+            padding-right: 65px;
+        }
+
+        .Ajuste1 {
+            margin-top: 8px;
+            padding-right: 45px;
+        }
+
+        .Ajuste2 {
+            margin-top: 8px;
+            padding-left: 45px;
+        }
+
+        .DetallePartida {
+            font-size: 14px;
+            line-height: 16px;
+        }
+
+        .BarraColorJugador {
+            bottom: 0;
+            position: absolute;
+            width: 495px;
+            height: 8px;
+        }
+
+        .BarraColorJugadorc1 {
+            background-color: transparent;
+            background-image: linear-gradient(90deg, #405bfe, transparent);
+            transform: scaleX(-1);
+        }
+
+        .BarraColorJugadorc2 {
+            background-color: transparent;
+            background-image: linear-gradient(270deg, transparent, red);
+        }
+
+        .Gradientc1 {
+            background-image: linear-gradient(90deg, transparent, #405bfe);
+        }
+
+        .Gradientc2 {
+            background-image: linear-gradient(90deg, transparent, red);
+        }
+
+        .CivWon {
+            filter: drop-shadow(0 0 8px #3F3);
+        }
+
+        .CivLose {
+            filter: drop-shadow(0 0 8px #F00);
+        }
+
+        .loading {
+            text-align: center;
+            color: #405bfe;
+            font-size: 28px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .error {
+            color: #f44336;
+            text-align: center;
+            font-size: 28px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        .TiempoDePartida {
+            top: 3px;
+            position: absolute;
+            width: 100%;
+            font-size: 12px;
+            text-align: center;
+            color: #888;
+        }
+
+        /* Game History Styling */
+        .game-history {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center;
+            gap: 2px;
+            margin: 0 6px;
+            width: fit-content;
+        }
+
+        .history-game {
+            width: 18px;
+            height: 18px;
+            border-radius: 2px;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.2s ease;
+            position: relative;
+            object-fit: cover;
+        }
+
+        .history-game:hover {
+            transform: scale(1.15);
+            border-color: rgba(255,255,255,0.8);
+        }
+
+        .history-win {
+            border-color: #4CAF50;
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.6);
+        }
+
+        .history-loss {
+            border-color: #f44336;
+            box-shadow: 0 0 4px rgba(244, 67, 54, 0.6);
+        }
+
+        .civ-emblem {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .unique-unit-large {
+            height: 84px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .unique-unit-large.right {
+            transform: scaleX(-1);
+        }
+
+        .unique-unit-info {
+            font-size: 11px;
+            color: #FFD700;
+            margin-left: 4px;
+            font-style: italic;
+        }
+
+        .player-civ-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div class="MainContent BordeAnimado" id="mainContent">
+        <div class="loading" id="loading">Loading player data...</div>
+        <div class="error" id="error" style="display: none;"></div>
+        
+                 <!-- Horizontal Layout -->
+         <div class="horizontal-layout" id="horizontalLayout" style="display: none; width: 100%; height: 100%; box-sizing: border-box; min-width: 450px;">
+             
+             <!-- Left Player Section -->
+             <div class="player-section left-player" style="flex: 0 1 auto; display: flex; align-items: center; padding: 0; min-width: 0;">
+                 <img id="team1UniqueUnitLarge" class="unique-unit-large" style="display: none; flex-shrink: 0; margin-right: 3px;" alt="Unique unit">
+                 <div class="player-info" style="width: 100%; min-width: 0; margin-right: 3px;">
+                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; min-width: 0;">
+                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+                             <div id="team1Name" style="font-size: 18px; font-weight: bold; color: #405bfe; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;"></div>
+                             <div id="team1Status" style="font-size: 11px; margin-left: 8px; flex-shrink: 0;"></div>
+                         </div>
+                         <div style="display: flex; align-items: center; justify-content: center;">
+                             <div class="game-history" id="team1History" style="display: none; margin-right: 4px;">
+                                 <div id="team1HistoryGames" style="display: flex; flex-direction: row; gap: 2px;"></div>
+                             </div>
+                             <div id="team1Rating" style="font-size: 16px; color: #4CAF50; font-weight: bold;"></div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="BarraColorJugador BarraColorJugadorc1" style="position: absolute; bottom: 0; left: 0; width: 50%; height: 2px;"></div>
+             </div>
+
+             <!-- Center Game Info -->
+             <div class="center-info" style="flex: 0 0 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px solid #555; border-right: 1px solid #555; padding: 0 3px;">
+                 <div id="gameType" style="font-size: 14px; font-weight: bold; margin-bottom: 1px; text-align: center;"></div>
+                 <div id="mapName" style="font-size: 12px; color: #ccc; margin-bottom: 1px; text-align: center;"></div>
+                 <div style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 10px;">
+                     <div id="gameStatus" style="text-align: center;"></div>
+                     <div id="matchTime" style="color: #888; text-align: center;"></div>
+                 </div>
+             </div>
+
+             <!-- Right Player Section -->
+             <div class="player-section right-player" style="flex: 0 1 auto; display: flex; align-items: center; padding: 0; min-width: 0;">
+                 <div class="player-info" style="width: 100%; min-width: 0; padding-left: 3px; padding-right: 3px;">
+                     <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; min-width: 0;">
+                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+                             <div id="team2Name" style="font-size: 18px; font-weight: bold; color: #f25f61; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;"></div>
+                         </div>
+                         <div style="display: flex; align-items: center; justify-content: center;">
+                             <div id="team2Rating" style="font-size: 16px; color: #4CAF50; font-weight: bold;"></div>
+                             <div id="team2Status" style="font-size: 11px; margin-left: 8px; flex-shrink: 0;"></div>
+                             <div class="game-history" id="team2History" style="display: none; margin-left: 4px;">
+                                 <div id="team2HistoryGames" style="display: flex; flex-direction: row; gap: 2px;"></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <img id="team2UniqueUnitLarge" class="unique-unit-large right" style="display: none; flex-shrink: 0;" alt="Unique unit">
+                 <div class="BarraColorJugador BarraColorJugadorc2" style="position: absolute; bottom: 0; right: 0; width: 50%; height: 2px;"></div>
+             </div>
+         </div>
+
+
+    </div>
+
+    <script>
+        class AoE2OverlayOriginalStyle {
+            constructor() {
+                this.profileId = null;
+                this.steamId = null;
+                this.currentMatch = null;
+                this.lastMatchId = null;
+                this.refreshInterval = 10000; // 10 seconds
+                this.init();
+            }
+
+            init() {
+                // Get URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                this.profileId = urlParams.get('profileid');
+                this.steamId = urlParams.get('idsteam') || urlParams.get('steamid');
+
+                if (!this.profileId && !this.steamId) {
+                    this.showError('Please provide profileid or steamid parameter');
+                    return;
+                }
+
+                console.log('AoE2 Overlay Original Style - Fixed API');
+                console.log('ProfileID:', this.profileId);
+                console.log('SteamID:', this.steamId);
+
+                this.startPolling();
+            }
+
+            async startPolling() {
+                try {
+                    await this.fetchPlayerData();
+                    setInterval(() => this.fetchPlayerData(), this.refreshInterval);
+                } catch (error) {
+                    console.error('Error starting polling:', error);
+                    this.showError('Failed to fetch player data');
+                }
+            }
+
+                         async fetchPlayerData() {
+                 try {
+                     console.log('=== Fetching Player Data ===');
+                     console.log('Profile ID:', this.profileId);
+                     console.log('Steam ID:', this.steamId);
+                     
+                     // Try AoE2Companion API for recent match
+                     let matchData = await this.fetchFromAoE2Companion();
+                     
+                     if (matchData) {
+                         this.processMatchData(matchData);
+                     } else {
+                         console.warn('No match data available');
+                     }
+
+                     // Fetch game history
+                     console.log('=== Fetching Game History ===');
+                     await this.fetchGameHistory();
+                     console.log('=== History fetch completed ===');
+                 } catch (error) {
+                     console.error('Error fetching player data:', error);
+                     this.showError(`API Error: ${error.message}`);
+                 }
+             }
+
+                         async fetchFromAoE2Companion() {
+                 try {
+                     const baseUrl = 'https://data.aoe2companion.com/api';
+                     
+                     let searchParam = '';
+                     if (this.profileId) {
+                         searchParam = `profile_ids=${this.profileId}`;
+                     } else if (this.steamId) {
+                         searchParam = `steam_id=${this.steamId}`;
+                     }
+
+                     const matchResponse = await fetch(`${baseUrl}/matches?${searchParam}&count=1`);
+                     if (!matchResponse.ok) {
+                         throw new Error(`HTTP ${matchResponse.status}`);
+                     }
+
+                     const matchData = await matchResponse.json();
+                     
+                     if (matchData && matchData.matches && matchData.matches.length > 0) {
+                         return {
+                             source: 'AoE2Companion',
+                             match: matchData.matches[0],
+                             api: 'companion'
+                         };
+                     }
+                 } catch (error) {
+                     console.warn('AoE2Companion API failed:', error);
+                     return null;
+                 }
+             }
+
+             async fetchGameHistory() {
+                 try {
+                     const baseUrl = 'https://data.aoe2companion.com/api';
+                     
+                     let searchParam = '';
+                     if (this.profileId) {
+                         searchParam = `profile_ids=${this.profileId}`;
+                     } else if (this.steamId) {
+                         searchParam = `steam_id=${this.steamId}`;
+                     }
+
+                     const url = `${baseUrl}/matches?${searchParam}&count=5`;
+                     console.log('Fetching game history from:', url);
+
+                     const historyResponse = await fetch(url);
+                     console.log('History response status:', historyResponse.status);
+                     
+                     if (!historyResponse.ok) {
+                         console.warn('History API request failed with status:', historyResponse.status);
+                         return;
+                     }
+
+                     const historyData = await historyResponse.json();
+                     console.log('Raw history data received:', historyData);
+                     
+                     if (historyData && historyData.matches && historyData.matches.length > 0) {
+                         console.log('Found', historyData.matches.length, 'history matches');
+                         this.updateGameHistory(historyData.matches);
+                     } else {
+                         console.warn('No history matches found in response');
+                     }
+                 } catch (error) {
+                     console.error('Failed to fetch game history:', error);
+                 }
+             }
+
+            processMatchData(data) {
+                if (!data || !data.match) {
+                    this.showError('No match data available');
+                    return;
+                }
+
+                const match = data.match;
+                
+                // Check if this is a new match
+                const matchId = match.matchId || match.match_id || match.game_id || match.id;
+                if (matchId === this.lastMatchId && this.currentMatch) {
+                    return; // No update needed
+                }
+
+                this.lastMatchId = matchId;
+                this.currentMatch = match;
+
+                this.updateUI(match, data.source);
+            }
+
+                         updateUI(match, source) {
+                 // Hide loading, show content
+                 document.getElementById('loading').style.display = 'none';
+                 document.getElementById('error').style.display = 'none';
+                 
+                 // Extract players from teams structure
+                 const players = [];
+                 if (match.teams && match.teams.length > 0) {
+                     match.teams.forEach(team => {
+                         if (team.players && team.players.length > 0) {
+                             players.push(...team.players);
+                         }
+                     });
+                 }
+
+                 if (players.length >= 2) {
+                     // Show horizontal layout
+                     document.getElementById('horizontalLayout').style.display = 'flex';
+
+                     // Update center info
+                     const mapName = match.mapName || match.map_type || match.map || 'Unknown Map';
+                     const gameType = match.leaderboardName || match.leaderboard_name || match.game_type || 'Ranked';
+                     const isOngoing = match.finished === null;
+                     
+                     document.getElementById('gameType').textContent = gameType;
+                     document.getElementById('mapName').textContent = mapName;
+                     document.getElementById('gameStatus').textContent = isOngoing ? '🔴 Live' : '✅ Finished';
+
+                     // Store current players for history update
+                     this.currentPlayers = players;
+                     
+                     // Ensure the target player is always on the left
+                     let targetPlayer = null;
+                     let otherPlayer = null;
+                     
+                     // Find the target player (the one we're tracking)
+                     for (const player of players) {
+                         const playerId = player.profileId || player.profile_id || player.steam_id;
+                         if ((this.profileId && playerId == this.profileId) || (this.steamId && playerId == this.steamId)) {
+                             targetPlayer = player;
+                         } else {
+                             otherPlayer = player;
+                         }
+                     }
+                     
+                     // If we found the target player, put them on the left
+                     if (targetPlayer && otherPlayer) {
+                         this.updatePlayerInfo(targetPlayer, 'team1');
+                         this.updatePlayerInfo(otherPlayer, 'team2');
+                         // Store the actual player objects with their team assignments for history
+                         this.currentPlayers = [targetPlayer, otherPlayer];
+                         this.playerTeamAssignments = { target: targetPlayer, other: otherPlayer };
+                     } else {
+                         // Fallback: just use the order from the API
+                         this.updatePlayerInfo(players[0], 'team1');
+                         this.updatePlayerInfo(players[1], 'team2');
+                         this.playerTeamAssignments = { target: players[0], other: players[1] };
+                     }
+
+                     // Show player history immediately if available
+                     if (this.currentPlayerHistories && this.playerTeamAssignments) {
+                         this.showPlayerHistory(this.playerTeamAssignments.target, 'team1');
+                         this.showPlayerHistory(this.playerTeamAssignments.other, 'team2');
+                     }
+
+                     // Calculate and show match time
+                     this.updateMatchTime(match);
+                 } else {
+                     console.warn('Insufficient player data in match');
+                     this.showError('Not enough player data');
+                 }
+             }
+
+                         updatePlayerInfo(player, teamId) {
+                 const nameEl = document.getElementById(`${teamId}Name`);
+                 const ratingEl = document.getElementById(`${teamId}Rating`);
+                 const uniqueUnitLargeEl = document.getElementById(`${teamId}UniqueUnitLarge`);
+                 const statusEl = document.getElementById(`${teamId}Status`);
+
+                 nameEl.textContent = player.name || 'Unknown Player';
+                 ratingEl.textContent = `${player.rating || 'N/A'}`;
+                 
+                 // Use civName from API or fallback to ID mapping
+                 const civName = player.civName || this.getCivName(player.civ);
+
+                 // Emblem removed for current game - we show unique unit instead
+
+                 // Set large unique unit image next to player name
+                 const uniqueUnitPath = this.getUniqueUnitImagePath(civName);
+                 console.log(`Setting large unique unit for ${civName}: ${uniqueUnitPath}`);
+                 if (uniqueUnitPath) {
+                     uniqueUnitLargeEl.src = uniqueUnitPath;
+                     uniqueUnitLargeEl.style.display = 'inline-block';
+                     uniqueUnitLargeEl.onload = () => {
+                         console.log(`✅ Large unique unit loaded successfully: ${uniqueUnitPath}`);
+                     };
+                     uniqueUnitLargeEl.onerror = () => {
+                         console.warn(`❌ Failed to load large unique unit: ${uniqueUnitPath}`);
+                         uniqueUnitLargeEl.style.display = 'none';
+                     };
+                 } else {
+                     console.warn(`❌ No unique unit path found for civ: ${civName}`);
+                     uniqueUnitLargeEl.style.display = 'none';
+                 }
+
+                 // Show win/loss status and rating change
+                 const winStatus = player.won === true ? '🏆' : player.won === false ? '❌' : '⏳';
+                 const ratingChange = player.ratingDiff ? (player.ratingDiff > 0 ? '+' : '') + player.ratingDiff : '';
+                 
+                 statusEl.innerHTML = `
+                     <div style="color: ${player.won ? '#4CAF50' : player.won === false ? '#f44336' : '#FFC107'}; font-weight: bold; display: flex; align-items: center; gap: 3px;">
+                         ${winStatus} ${ratingChange ? ratingChange : ''}
+                     </div>
+                 `;
+
+                 // Show player's game history (if available) - will be handled after all players are processed
+             }
+
+
+
+                         updateMatchTime(match) {
+                 const timeEl = document.getElementById('matchTime');
+                 
+                 if (match.started) {
+                     const startTime = new Date(match.started);
+                     const endTime = match.finished ? new Date(match.finished) : new Date();
+                     const duration = Math.floor((endTime - startTime) / 1000 / 60); // minutes
+                     
+                     timeEl.textContent = `${duration}m`;
+                 } else {
+                     timeEl.textContent = '';
+                 }
+             }
+
+            getCivName(civId) {
+                // Handle string civs directly (from new API)
+                if (typeof civId === 'string') {
+                    return civId.charAt(0).toUpperCase() + civId.slice(1);
+                }
+
+                // Civilization mapping for numeric IDs
+                const civilizations = {
+                    1: 'Britons', 2: 'Franks', 3: 'Goths', 4: 'Teutons', 5: 'Japanese',
+                    6: 'Chinese', 7: 'Byzantines', 8: 'Persians', 9: 'Saracens', 10: 'Turks',
+                    11: 'Vikings', 12: 'Mongols',                     13: 'Celts', 14: 'Spanish', 15: 'Aztecs',
+                    16: 'Maya', 17: 'Huns', 18: 'Koreans', 19: 'Italians', 20: 'Indians',
+                    21: 'Inca', 22: 'Magyars', 23: 'Slavs', 24: 'Portuguese', 25: 'Ethiopians',
+                    26: 'Malians', 27: 'Berbers', 28: 'Khmer', 29: 'Malay', 30: 'Burmese',
+                    31: 'Vietnamese', 32: 'Bulgarians', 33: 'Tatars', 34: 'Cumans', 
+                    35: 'Lithuanians', 36: 'Burgundians', 37: 'Sicilians', 38: 'Poles',
+                    39: 'Bohemians', 40: 'Dravidians', 41: 'Bengalis', 42: 'Gurjaras',
+                    43: 'Georgians', 44: 'Romans', 45: 'Armenians'
+                };
+
+                return civilizations[civId] || `Civ ${civId}` || 'Unknown';
+            }
+
+            getCivEmblemPath(civName) {
+                if (!civName || civName === 'Unknown') return null;
+                
+                // Map civilization names to their actual image filenames with hashes
+                const emblemFiles = {
+                    'Britons': 'img/Britons.e9a48f8a.png',
+                    'Franks': 'img/Franks.5778a2bb.png',
+                    'Goths': 'img/Goths.ececf9d5.png',
+                    'Teutons': 'img/Teutons.a4362011.png',
+                    'Japanese': 'img/Japanese.30635b68.png',
+                    'Chinese': 'img/Chinese.c105ca03.png',
+                    'Byzantines': 'img/Byzantines.46076569.png',
+                    'Persians': 'img/Persians.a7484c8a.png',
+                    'Saracens': 'img/Saracens.1e1781ff.png',
+                    'Turks': 'img/Turks.b385429f.png',
+                    'Vikings': 'img/Vikings.ef59c677.png',
+                    'Mongols': 'img/Mongols.61b8fda2.png',
+                    'Celts': 'img/Celts.957ad1d1.png',
+                    'Spanish': 'img/Spanish.25722ce2.png',
+                    'Aztecs': 'img/Aztecs.993cd8e0.png',
+                    'Maya': 'img/Mayans.ff00cf46.png',
+                    'Mayans': 'img/Mayans.ff00cf46.png', // Legacy support
+                    'Huns': 'img/Huns.20cfa1ab.png',
+                    'Koreans': 'img/Koreans.d5fcf85b.png',
+                    'Italians': 'img/Italians.45513cc1.png',
+                    'Indians': 'img/Indians.0249e451.png',
+                    'Inca': 'img/Incas.0eec35bf.png',
+                    'Incas': 'img/Incas.0eec35bf.png', // Legacy support
+                    'Magyars': 'img/Magyars.b2f0816a.png',
+                    'Slavs': 'img/Slavs.09dc13cf.png',
+                    'Portuguese': 'img/Portuguese.aa10e1a9.png',
+                    'Ethiopians': 'img/Ethiopians.c42c8800.png',
+                    'Malians': 'img/Malians.b5ad3545.png',
+                    'Berbers': 'img/Berbers.399a8502.png',
+                    'Khmer': 'img/Khmer.8e876cd5.png',
+                    'Malay': 'img/Malay.a0261e71.png',
+                    'Burmese': 'img/Burmese.b830634f.png',
+                    'Vietnamese': 'img/Vietnamese.a941f04c.png',
+                    'Bulgarians': 'img/Bulgarians.6907c953.png',
+                    'Tatars': 'img/Tatars.869a8b59.png',
+                    'Cumans': 'img/Cumans.b30f297f.png',
+                    'Lithuanians': 'img/Lithuanians.0e4dbdae.png',
+                    'Burgundians': 'img/Burgundians.4e63af9f.png',
+                    'Sicilians': 'img/Sicilians.f248c9f0.png',
+                    'Poles': 'img/Poles.4576c87f.png',
+                    'Bohemians': 'img/Bohemians.0c0dde60.png',
+                    'Dravidians': 'img/Dravidians.869a8b59.png',
+                    'Bengalis': 'img/Bengalis.eb07732f.png',
+                    'Gurjaras': 'img/Gurjaras.544a3c96.png'
+                };
+                
+                return emblemFiles[civName] || null;
+            }
+
+            getUniqueUnitImagePath(civName) {
+                if (!civName || civName === 'Unknown') return null;
+                
+                // Map civilization names to their unique unit image filenames (with -DE suffix)
+                const uniqueUnitFiles = {
+                    'Britons': 'img/britons-DE.3e887a89.png',
+                    'Franks': 'img/franks-DE.4103768f.png',
+                    'Goths': 'img/goths-DE.763b1d5c.png',
+                    'Teutons': 'img/teutons-DE.efa7c791.png',
+                    'Japanese': 'img/japanese-DE.8a87703b.png',
+                    'Chinese': 'img/chinese-DE.bfc430cc.png',
+                    'Byzantines': 'img/byzantines-DE.226bd39a.png',
+                    'Persians': 'img/persians-DE.7f33b537.png',
+                    'Saracens': 'img/saracens-DE.6d812b2a.png',
+                    'Turks': 'img/turks-DE.689c2efd.png',
+                    'Vikings': 'img/vikings-DE.0a307a30.png',
+                    'Mongols': 'img/mongols-DE.4dc77e54.png',
+                    'Celts': 'img/celts-DE.bf777084.png',
+                    'Spanish': 'img/spanish-DE.9449b734.png',
+                    'Aztecs': 'img/aztecs-DE.13e2878c.png',
+                    'Maya': 'img/mayans-DE.f88e1489.png',
+                    'Mayans': 'img/mayans-DE.f88e1489.png', // Legacy support
+                    'Huns': 'img/huns-DE.dea1c562.png',
+                    'Koreans': 'img/koreans-DE.22e04b69.png',
+                    'Italians': 'img/italians-DE.029ea442.png',
+                    'Indians': 'img/indians-DE.c83ce2de.png',
+                    'Inca': 'img/incas-DE.63af7485.png',
+                    'Incas': 'img/incas-DE.63af7485.png', // Legacy support
+                    'Magyars': 'img/magyars-DE.6e21edd4.png',
+                    'Slavs': 'img/slavs-DE.f4b88ab2.png',
+                    'Portuguese': 'img/portuguese-DE.16b98055.png',
+                    'Ethiopians': 'img/ethiopians-DE.fe969fbe.png',
+                    'Malians': 'img/malians-DE.63a1a028.png',
+                    'Berbers': 'img/berbers-DE.65ed0f25.png',
+                    'Khmer': 'img/khmer-DE.ea0de59e.png',
+                    'Malay': 'img/malay-DE.0d66ca5c.png',
+                    'Burmese': 'img/burmese-DE.39606edc.png',
+                    'Vietnamese': 'img/vietnamese-DE.1b249357.png',
+                    'Bulgarians': 'img/bulgarians-DE.86ee5f5b.png',
+                    'Tatars': 'img/tatars-DE.a193a72a.png',
+                    'Cumans': 'img/cumans-DE.8e8af165.png',
+                    'Lithuanians': 'img/lithuanians-DE.980f172d.png',
+                    'Burgundians': 'img/burgundians-DE.8598d3f0.png',
+                    'Sicilians': 'img/sicilians-DE.f20091db.png',
+                    'Poles': 'img/poles-DE.64a3c95e.png',
+                    'Bohemians': 'img/bohemians-DE.1b906351.png',
+                    'Dravidians': 'img/dravidians-DE.79a629da.png',
+                    'Bengalis': 'img/bengalis-DE.4537cc27.png',
+                    'Gurjaras': 'img/gurjaras-DE.14a896aa.png'
+                };
+                
+                return uniqueUnitFiles[civName] || null;
+            }
+
+                         updateGameHistory(matches) {
+                 console.log('updateGameHistory called with', matches.length, 'matches');
+                 
+                 if (!matches || matches.length <= 1) {
+                     console.warn('No matches to process for history (need more than current match)');
+                     return;
+                 }
+
+                 // Create history for each player
+                 const playerHistories = {};
+                 
+                 // Process matches to find each player's win/loss (skip first match as it's current)
+                 const historyMatches = matches.slice(1); // Skip current match
+                 historyMatches.forEach((match, matchIndex) => {
+                     console.log(`Processing history match ${matchIndex}:`, match);
+                     
+                     if (match.teams && match.teams.length > 0) {
+                         match.teams.forEach((team, teamIndex) => {
+                             console.log(`  Team ${teamIndex}:`, team);
+                             
+                             if (team.players && team.players.length > 0) {
+                                 team.players.forEach((player, playerIndex) => {
+                                     console.log(`    Player ${playerIndex}:`, player);
+                                     
+                                     const playerId = player.profileId || player.profile_id || player.steam_id;
+                                     console.log(`    Player ID: ${playerId}`);
+                                     
+                                     if (playerId) {
+                                         if (!playerHistories[playerId]) {
+                                             playerHistories[playerId] = [];
+                                             console.log(`    Created new history for player ${playerId}`);
+                                         }
+                                         
+                                         const won = player.won === true;
+                                         const cssClass = won ? 'history-win' : 'history-loss';
+                                         
+                                         // Get civ name and emblem for this match
+                                         const civName = player.civName || this.getCivName(player.civ);
+                                         const emblemPath = this.getCivEmblemPath(civName);
+                                         
+                                         console.log(`    History entry for ${civName}: emblem path = ${emblemPath}`);
+                                         
+                                         const historyEntry = emblemPath ? 
+                                             `<img src="${emblemPath}" class="history-game ${cssClass}" alt="${civName}" title="${civName} - ${won ? 'Won' : 'Lost'}">` :
+                                             `<div class="history-game ${cssClass}" title="${civName || 'Unknown'} - ${won ? 'Won' : 'Lost'}" style="background: ${won ? '#4CAF50' : '#f44336'}; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">${civName ? civName.charAt(0) : '?'}</div>`;
+                                         
+                                         playerHistories[playerId].push(historyEntry);
+                                         console.log(`    Added ${won ? 'WIN' : 'LOSS'} to history for player ${playerId}`);
+                                     } else {
+                                         console.warn(`    No player ID found for player:`, player);
+                                     }
+                                 });
+                             } else {
+                                 console.warn(`  No players in team ${teamIndex}`);
+                             }
+                         });
+                     } else {
+                         console.warn(`No teams in match ${matchIndex}`);
+                     }
+                 });
+
+                 console.log('Final player histories:', playerHistories);
+                 
+                 // Update UI for each player
+                 this.currentPlayerHistories = playerHistories;
+                 
+                 // Update history display for current players if they exist
+                 if (this.currentPlayers && this.currentPlayers.length >= 2 && this.playerTeamAssignments) {
+                     console.log('Updating history display for current players...');
+                     // Always show target player's history on the left (team1)
+                     this.showPlayerHistory(this.playerTeamAssignments.target, 'team1');
+                     this.showPlayerHistory(this.playerTeamAssignments.other, 'team2');
+                 }
+             }
+
+             showPlayerHistory(player, teamId) {
+                 console.log('=== showPlayerHistory called ===');
+                 console.log('Team:', teamId);
+                 console.log('Player:', player);
+                 
+                 if (!this.currentPlayerHistories) {
+                     console.log('❌ No player histories available yet');
+                     return;
+                 }
+                 
+                 const playerId = player.profileId || player.profile_id || player.steam_id;
+                 console.log('🔍 Looking for history for player ID:', playerId);
+                 console.log('📊 Available histories:', Object.keys(this.currentPlayerHistories));
+                 
+                 const historyData = this.currentPlayerHistories[playerId];
+                 
+                 if (historyData && historyData.length > 0) {
+                     const historyContainer = document.getElementById(`${teamId}HistoryGames`);
+                     const historySection = document.getElementById(`${teamId}History`);
+                     
+                     console.log('✅ Found history data:', historyData);
+                     console.log('📦 History container element:', historyContainer);
+                     console.log('📦 History section element:', historySection);
+                     
+                     if (historyContainer && historySection) {
+                         // Show the last 5 games (most recent first)
+                         const recentHistory = historyData.slice(0, 5);
+                         console.log('🎮 Recent history to display:', recentHistory);
+                         
+                         historyContainer.innerHTML = recentHistory.join('');
+                         historySection.style.display = 'inline-flex';
+                         
+                         console.log('✨ SUCCESS: Updated history display for', teamId, 'with', recentHistory.length, 'games');
+                         console.log('🎯 History section style:', historySection.style.cssText);
+                         console.log('🎯 History container innerHTML:', historyContainer.innerHTML);
+                     } else {
+                         console.log('❌ Missing DOM elements - Container:', !!historyContainer, 'Section:', !!historySection);
+                     }
+                 } else {
+                     console.log('⚠️ No history data found for player', playerId);
+                     // Hide history section if no data
+                     const historySection = document.getElementById(`${teamId}History`);
+                     if (historySection) {
+                         historySection.style.display = 'none';
+                     }
+                 }
+             }
+
+             showError(message) {
+                 document.getElementById('loading').style.display = 'none';
+                 document.getElementById('error').style.display = 'block';
+                 document.getElementById('error').textContent = message;
+                 
+                 // Hide main layout
+                 document.getElementById('horizontalLayout').style.display = 'none';
+             }
+        }
+
+        // Initialize the overlay when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new AoE2OverlayOriginalStyle();
+        });
+    </script>
+</body>
+</html>
+</html>
