@@ -17,7 +17,7 @@ Simply replace `2223786` with your own Profile ID in the URL above.
 
 ### Basic URL Structure
 
-You need your Profile ID from aoeinsights.com:
+You need your Profile ID from aoe2insights.com:
 
 ```bash
 # Using Profile ID
