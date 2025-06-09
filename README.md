@@ -44,7 +44,7 @@ https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/overlay-aoe.html?profileid
 
 ### Finding Your IDs
 
--   **Profile ID**: Go to https://www.aoeinsights.com/, search your profile, and copy the number from the URL
+-   **Profile ID**: Go to https://www.aoe2insights.com/, search your profile, and copy the number from the URL
 
 ## Deployment to GitHub Pages
 
